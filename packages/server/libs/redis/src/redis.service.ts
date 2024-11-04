@@ -20,3 +20,5 @@ export class RedisService {
     })
   }
 }
+
+export const InjectRedisService = Inject(RedisService)
