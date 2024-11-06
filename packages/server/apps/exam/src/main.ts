@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { ExamModule } from './exam.module'
 import { Transport } from '@nestjs/microservices'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create(ExamModule)
@@ -10,6 +11,8 @@ async function bootstrap() {
       port: 8888,
     },
   })
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.startAllMicroservices()
   await app.listen(process.env.port ?? 3002)
 }

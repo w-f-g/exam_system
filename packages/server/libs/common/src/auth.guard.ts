@@ -44,23 +44,23 @@ export class AuthGuard implements CanActivate {
       return true
     }
 
-    const authorization = request.headers.authorization
+    const token = request.headers.authorization
 
-    if (!authorization) {
+    if (!token) {
       throw new UnauthorizedException('用户未登录')
     }
 
     try {
-      const token = authorization.split(' ')[1]
       const data = this.jwtService.verify<JwtUserData>(token)
 
-      request.user = {
+      const user = {
         userId: data.userId,
         username: data.username,
       }
+      request.user = user
       response.header(
         'token',
-        this.jwtService.sign(data, {
+        this.jwtService.sign(user, {
           expiresIn: '7d',
         }),
       )

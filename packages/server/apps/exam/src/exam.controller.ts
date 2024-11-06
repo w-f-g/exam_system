@@ -1,18 +1,59 @@
-import { Controller, Get } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common'
 import { ExamService } from './exam.service'
-import { MessagePattern } from '@nestjs/microservices'
+import { ExamAddDto, ExamSaveDto } from './dto/exam.dto'
+import { RequireLogin, UserInfo } from '@app/common'
 
-@Controller()
+@Controller('exam')
 export class ExamController {
   constructor(private readonly examService: ExamService) {}
 
-  @Get()
-  getHello(): string {
-    return this.examService.getHello()
+  @Post('add')
+  @RequireLogin()
+  async add(@Body() data: ExamAddDto, @UserInfo('userId') userId: number) {
+    const res = await this.examService.add(data, userId)
+    return res
   }
 
-  @MessagePattern('sum')
-  sun(numArr: Array<number>): number {
-    return numArr.reduce((t, n) => t + n, 0)
+  @Delete('delete/:id')
+  @RequireLogin()
+  async delete(
+    @UserInfo('userId') userId: number,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    const res = await this.examService.delete(userId, id)
+    return res
+  }
+
+  @Get('list')
+  @RequireLogin()
+  async list(@UserInfo('userId') userId: number, @Query('bin') bin: string) {
+    const res = await this.examService.list(userId, bin)
+    return res
+  }
+
+  @Post('save')
+  @RequireLogin()
+  async save(@Body() data: ExamSaveDto) {
+    const res = await this.examService.save(data)
+    return res
+  }
+
+  @Get('publish/:id')
+  @RequireLogin()
+  async publish(
+    @UserInfo('userId') userId: number,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    const res = await this.examService.publish(userId, id)
+    return res
   }
 }
