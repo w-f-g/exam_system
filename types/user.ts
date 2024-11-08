@@ -14,4 +14,9 @@ export interface IUserRegisterDto
 
 export interface IUserLoginDto extends Pick<IUser, 'username' | 'password'> {}
 
+export interface IUserLoginVo {
+  user: Omit<IUser, 'password'>
+  token: string
+}
+
 export interface IUserUpdatePasswordDto extends IUserRegisterDto {}
