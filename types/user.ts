@@ -12,6 +12,9 @@ export interface IUserRegisterDto
   captcha: string
 }
 
+export interface IUSerRegisterVo
+  extends Omit<IUser, 'password' | 'updateTime'> {}
+
 export interface IUserLoginDto extends Pick<IUser, 'username' | 'password'> {}
 
 export interface IUserLoginVo {
