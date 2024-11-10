@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 
 const WHITE_LIST = ['/login', '/register', '/update_password']
 
-export const Auth = ({ children }: PropsWithChildren) => {
+export default function Auth({ children }: PropsWithChildren) {
   const user = useUserStore((s) => s.user)
   const location = useLocation()
   console.log(location)

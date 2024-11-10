@@ -1,11 +1,9 @@
-import { useEffect } from 'react'
-import './App.css'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { PropsWithChildren, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { httpClient } from '@/utils'
 import { message } from 'antd'
-import { Auth } from '@/routers/middlewares/Auth'
 
-function AppLayout() {
+function HttpWrapper({ children }: PropsWithChildren) {
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -22,11 +20,8 @@ function AppLayout() {
       unsubscribe_401()
     }
   }, [])
-  return (
-    <Auth>
-      <Outlet />
-    </Auth>
-  )
+
+  return children
 }
 
-export default AppLayout
+export default HttpWrapper

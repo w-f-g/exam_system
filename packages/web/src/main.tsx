@@ -1,9 +1,20 @@
 import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
-import routers from './routers/index.tsx'
+import { BrowserRouter } from 'react-router-dom'
 
-import './index.css'
+import App from '@/layouts/App'
+import HttpWrapper from '@/layouts/HttpWrapper'
+import Auth from './routers/middlewares/Auth'
 
-const render = <RouterProvider router={routers} />
+import '@/styles/index.css'
+
+const render = (
+  <BrowserRouter>
+    <HttpWrapper>
+      <Auth>
+        <App />
+      </Auth>
+    </HttpWrapper>
+  </BrowserRouter>
+)
 
 createRoot(document.getElementById('root')!).render(render)
