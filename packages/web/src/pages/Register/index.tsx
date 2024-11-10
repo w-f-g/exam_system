@@ -34,9 +34,7 @@ export default function Login() {
     }
   }
 
-  const onFinish = async (
-    value: IUserRegisterDto & Record<'confirmPassword', string>,
-  ) => {
+  const onFinish = async (value: IUserRegisterDto) => {
     const res = await register(value)
     if (res.status === 200 || res.status === 201) {
       message.success('注册成功')
@@ -81,18 +79,18 @@ export default function Login() {
           name="confirmPassword"
           rules={[
             {
-              validator(rule, value: string, callback) {
+              validator(_, value: string) {
                 if (!value) {
-                  return callback('请输入确认密码')
+                  return Promise.reject('请输入确认密码')
                 }
                 if (value?.length < 6) {
-                  return callback('密码不能少于 6 位')
+                  return Promise.reject('密码不能少于 6 位')
                 }
                 const pwd = form.getFieldValue('password')
                 if (value !== pwd) {
-                  return callback('两次输入密码不一致')
+                  return Promise.reject('两次输入密码不一致')
                 }
-                callback()
+                Promise.resolve()
               },
             },
           ]}

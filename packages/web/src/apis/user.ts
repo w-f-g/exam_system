@@ -3,6 +3,7 @@ import {
   IUserLoginDto,
   IUserLoginVo,
   IUserRegisterDto,
+  IUserUpdatePasswordDto,
 } from '@exam_system/types'
 
 export const login = async (data: IUserLoginDto) => {
@@ -17,7 +18,6 @@ export const login = async (data: IUserLoginDto) => {
 export const sendRegisterCaptcha = async (address: string) => {
   const res = await request({
     url: '/user/register_captcha',
-    method: 'get',
     params: {
       address,
     },
@@ -28,6 +28,25 @@ export const sendRegisterCaptcha = async (address: string) => {
 export const register = async (data: IUserRegisterDto) => {
   const res = await request({
     url: '/user/register',
+    method: 'post',
+    data,
+  })
+  return res
+}
+
+export const sendUpdatePasswordCaptcha = async (address: string) => {
+  const res = await request({
+    url: '/user/update_password/captcha',
+    params: {
+      address,
+    },
+  })
+  return res
+}
+
+export const updatePassword = async (data: IUserUpdatePasswordDto) => {
+  const res = await request({
+    url: '/user/update_password',
     method: 'post',
     data,
   })

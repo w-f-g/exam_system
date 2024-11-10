@@ -1,11 +1,5 @@
 import { Button, Form, Input } from 'antd'
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { IUserLoginDto } from '@exam_system/types'
 import { login } from '@/stores/user'
 
