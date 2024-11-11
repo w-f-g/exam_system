@@ -28,7 +28,7 @@ export default function Login() {
       id="login-container"
       className="w-[400px] mt-[100px] mx-auto mb-0 text-center"
     >
-      <h1 className="text-2xl font-bold mb-10">考试系统</h1>
+      <h1 className="mb-10">考试系统</h1>
       <Form
         onFinish={onFinish}
         colon={false}

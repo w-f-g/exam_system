@@ -30,3 +30,14 @@ export const login = async (userInfo: IUserLoginDto) => {
     }
   })
 }
+
+export const logout = () => {
+  return Promise.resolve().then(() => {
+    useUserStore.setState(() => {
+      return {
+        user: null,
+        token: '',
+      }
+    })
+  })
+}

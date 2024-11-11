@@ -12,6 +12,8 @@ export interface IExam {
   createUser: IUser
 }
 
+export interface IExamListVo extends Omit<IExam, 'createUser'> {}
+
 export interface IExamAddDto extends Pick<IExam, 'name'> {}
 
 export interface IExamSaveDto extends Pick<IExam, 'id' | 'content'> {}
