@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common'
 import { ExamService } from './exam.service'
@@ -33,6 +34,16 @@ export class ExamController {
     return res
   }
 
+  @Put('recover/:id')
+  @RequireLogin()
+  async recover(
+    @UserInfo('userId') userId: number,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    const res = await this.examService.recover(userId, id)
+    return res
+  }
+
   @Get('list')
   @RequireLogin()
   async list(@UserInfo('userId') userId: number, @Query('bin') bin: string) {
@@ -54,6 +65,16 @@ export class ExamController {
     @Param('id', new ParseIntPipe()) id: number,
   ) {
     const res = await this.examService.publish(userId, id)
+    return res
+  }
+
+  @Get('unpublish/:id')
+  @RequireLogin()
+  async unpublish(
+    @UserInfo('userId') userId: number,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    const res = await this.examService.unpublish(userId, id)
     return res
   }
 }

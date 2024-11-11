@@ -51,6 +51,18 @@ export class ExamService {
     })
   }
 
+  recover(userId: number, id: number) {
+    return this.prismaService.exam.update({
+      data: {
+        isDelete: false,
+      },
+      where: {
+        id,
+        createUserId: userId,
+      },
+    })
+  }
+
   async publish(userId: number, id: number) {
     return this.prismaService.exam.update({
       data: {
@@ -70,6 +82,18 @@ export class ExamService {
       },
       where: {
         id: data.id,
+      },
+    })
+  }
+
+  async unpublish(userId: number, id: number) {
+    return this.prismaService.exam.update({
+      data: {
+        isPublish: false,
+      },
+      where: {
+        id,
+        createUserId: userId,
       },
     })
   }
