@@ -24,6 +24,7 @@ export type TQuestionContext = {
   curQuestionId: number | null
   setCurQuestionId: Dispatch<SetStateAction<number | null>>
   add: (data: TQuestion) => void
+  load: (data: TQuestion[]) => void
   delete: (id: number) => void
   update: (data: TQuestion) => void
 }
@@ -34,6 +35,7 @@ type TQuestionAction =
   | { type: 'add'; data: TQuestion }
   | { type: 'update'; data: TQuestion }
   | { type: 'delete'; id: number }
+  | { type: 'load'; data: TQuestion[] }
 
 const reducer = (state: TQuestion[], action: TQuestionAction) => {
   switch (action.type) {
@@ -49,6 +51,9 @@ const reducer = (state: TQuestion[], action: TQuestionAction) => {
         state[index] = action.data
       }
       return [...state]
+    }
+    case 'load': {
+      return [...action.data]
     }
     default: {
       return state
@@ -81,12 +86,20 @@ export const QuestionProvider = ({ children }: PropsWithChildren) => {
     })
   }
 
+  const load = (data: TQuestion[]) => {
+    dispatch({
+      type: 'load',
+      data,
+    })
+  }
+
   return (
     <QuestionContext.Provider
       value={{
         state,
         curQuestionId,
         add,
+        load,
         update,
         delete: deleteQuesttion,
         setCurQuestionId,

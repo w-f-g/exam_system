@@ -1,3 +1,4 @@
+import { TQuestion } from '@/pages/Edit/QuestionContext'
 import { request } from '@/utils'
 import { IExamAddDto, IExamListVo } from '@exam_system/types'
 
@@ -30,6 +31,25 @@ export const recoverExam = async (id: number) => {
   const res = await request({
     url: '/exam/recover/' + id,
     method: 'put',
+  })
+  return res
+}
+
+export const findExam = async (id: number) => {
+  const res = await request<IExamListVo>({
+    url: '/exam/find/' + id,
+  })
+  return res.data
+}
+
+export const saveExam = async (id: number, data: TQuestion[]) => {
+  const res = await request({
+    url: '/exam/save',
+    method: 'post',
+    data: {
+      id,
+      content: JSON.stringify(data),
+    },
   })
   return res
 }
