@@ -79,7 +79,11 @@ export default function Home() {
                       <Button className="m-[10px] bg-[darkblue]" type="primary">
                         {x.isPublish ? '停止' : '发布'}
                       </Button>
-                      <Button className="m-[10px] bg-[green]" type="primary">
+                      <Button
+                        className="m-[10px] bg-[green]"
+                        type="primary"
+                        onClick={() => navigate(`/edit/${x.id}`)}
+                      >
                         编辑
                       </Button>
                       <Popconfirm

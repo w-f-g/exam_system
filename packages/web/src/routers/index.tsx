@@ -3,7 +3,8 @@ import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import UpdatePassword from '@/pages/UpdatePassword'
-import { Result } from 'antd'
+import Edit from '@/pages/Edit'
+import NotFound from '@/pages/NotFound'
 
 declare module 'react-router-dom' {
   interface IndexRouteObject {
@@ -45,13 +46,11 @@ export const routes: RouteObject[] = [
     },
   },
   {
+    path: 'edit/:id',
+    element: <Edit />,
+  },
+  {
     path: '*',
-    element: (
-      <Result
-        status="404"
-        title="404"
-        subTitle="Sorry, the page you visited does not exist."
-      />
-    ),
+    element: <NotFound />,
   },
 ]
