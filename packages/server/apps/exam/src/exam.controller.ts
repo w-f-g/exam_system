@@ -77,4 +77,11 @@ export class ExamController {
     const res = await this.examService.unpublish(userId, id)
     return res
   }
+
+  @Get('find/:id')
+  @RequireLogin()
+  async find(@Param('id', new ParseIntPipe()) id: number) {
+    const res = await this.examService.find(id)
+    return res
+  }
 }
