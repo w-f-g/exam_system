@@ -1,15 +1,15 @@
-import { Radio as AntdRadio, RadioProps } from 'antd'
+import { Radio as AntdRadio } from 'antd'
 
 type Props = {
   options: string
-  onChange: RadioProps['onChange']
 }
 
-export default function Radio({ options, onChange }: Props) {
+export default function Radio({ options, ...props }: Props) {
   const _options = options.split(',').filter(Boolean)
+
   return (
     <div>
-      <AntdRadio.Group onChange={onChange}>
+      <AntdRadio.Group {...props}>
         {_options.map((o, i) => {
           return (
             <AntdRadio key={o + i} value={o}>

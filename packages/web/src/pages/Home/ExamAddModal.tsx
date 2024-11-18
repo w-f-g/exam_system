@@ -21,8 +21,8 @@ export default function ExamAddModal({ isOpen, handleClose }: Props) {
     await form.validateFields()
 
     const values: IExamAddDto = form.getFieldsValue()
-    const res = await addExam(values)
-    console.log(res)
+    await addExam(values)
+    // console.log(res)
     message.success('创建成功')
     form.resetFields()
     handleClose()

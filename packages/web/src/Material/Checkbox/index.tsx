@@ -1,17 +1,16 @@
 import { Checkbox as AntdCheckbox } from 'antd'
-import { CheckboxGroupProps } from 'antd/es/checkbox'
+import { useEffect, useState } from 'react'
 
 type Props = {
   options: string
-  onChange: CheckboxGroupProps['onChange']
 }
 
-export default function Checkbox({ options, onChange }: Props) {
+export default function Checkbox({ options, ...props }: Props) {
   return (
     <div>
       <AntdCheckbox.Group
         options={options.split(',').filter(Boolean)}
-        onChange={onChange}
+        {...props}
       />
     </div>
   )

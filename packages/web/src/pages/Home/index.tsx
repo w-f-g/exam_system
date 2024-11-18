@@ -1,11 +1,12 @@
 import { deleteExam, getExamList, recoverExam } from '@/apis'
 import { IExamListVo } from '@exam_system/types'
-import { Button, message, Popconfirm } from 'antd'
+import { Button, message, Popconfirm, Popover } from 'antd'
 import { useEffect, useState } from 'react'
 import ExamAddModal from './ExamAddModal'
-import { PoweroffOutlined } from '@ant-design/icons'
+import { CopyOutlined, PoweroffOutlined } from '@ant-design/icons'
 import { logout } from '@/stores/user'
 import { useNavigate } from 'react-router-dom'
+import copy from 'copy-to-clipboard'
 
 export default function Home() {
   const [examList, setExamList] = useState<IExamListVo[]>([])
@@ -68,6 +69,7 @@ export default function Home() {
           {examList
             .filter((x) => (bin ? x.isDelete === true : x.isDelete === false))
             .map((x) => {
+              const examUrl = window.location.origin + '/exam/' + x.id
               return (
                 <div
                   key={x.id}
@@ -86,6 +88,21 @@ export default function Home() {
                       >
                         编辑
                       </Button>
+                      <Popover
+                        trigger="click"
+                        content={
+                          <div className="flex">
+                            <span>{examUrl}</span>
+                            <CopyOutlined
+                              title="复制链接"
+                              className="ml-1 cursor-pointer"
+                              onClick={() => copy(examUrl)}
+                            />
+                          </div>
+                        }
+                      >
+                        <Button>考试链接</Button>
+                      </Popover>
                       <Popconfirm
                         title="试卷删除"
                         description="确认放入回收站吗？"

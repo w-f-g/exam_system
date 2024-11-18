@@ -5,10 +5,6 @@ const config = {
   type: 'checkbox',
   sort: 1,
   component: Checkbox,
-  props: {
-    options: '',
-    onChange: () => {},
-  },
 }
 
 export default config

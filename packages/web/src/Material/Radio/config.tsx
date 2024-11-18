@@ -5,10 +5,6 @@ const config = {
   type: 'radio',
   sort: 0,
   component: Radio,
-  props: {
-    options: '',
-    onChange: () => {},
-  },
 }
 
 export default config

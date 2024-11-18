@@ -43,9 +43,14 @@ export default function EditArea() {
     >
       {state.map((x) => {
         const Component = materialConfigs[x.type].component
-        const props: Record<string, any> = {}
+        const props: Record<string, any> = {
+          value: x.answer,
+        }
         if (x.type !== 'input') {
           props.options = x.options?.join()
+        }
+        if (x.type === 'checkbox') {
+          props.value = x.answer.split(',')
         }
         return (
           <div
@@ -55,8 +60,8 @@ export default function EditArea() {
             style={
               curQuestionId === x.id
                 ? {
-                    border: '1px solid blue',
-                  }
+                  border: '1px solid blue',
+                }
                 : {}
             }
           >

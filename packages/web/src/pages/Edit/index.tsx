@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Button, message } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { findExam, saveExam } from '@/apis'
@@ -15,6 +15,17 @@ export default function Edit() {
 
   useEffect(() => {
     onLoad(+id!)
+
+    const save = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault()
+        handleSaveExam()
+      }
+    }
+    window.addEventListener('keydown', save)
+    return () => {
+      window.removeEventListener('keydown', save)
+    }
   }, [id])
 
   const onLoad = async (id: number) => {
@@ -40,6 +51,9 @@ export default function Edit() {
           <Button onClick={() => setPreviewModalOpen(true)}>预览</Button>
           <Button type="primary" onClick={handleSaveExam}>
             保存
+          </Button>
+          <Button>
+            <Link to="/">返回</Link>
           </Button>
         </div>
       </div>

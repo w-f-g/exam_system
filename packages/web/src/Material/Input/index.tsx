@@ -1,13 +1,13 @@
-import { Input as AntdInput, InputProps } from 'antd'
+import { Input as AntdInput } from 'antd'
 
 type Props = {
-  onChange: InputProps['onChange']
+  value?: string
 }
 
-export default function Input({ onChange }: Props) {
+export default function Input(props: Props) {
   return (
     <div>
-      <AntdInput onChange={onChange} />
+      <AntdInput {...props} />
     </div>
   )
 }

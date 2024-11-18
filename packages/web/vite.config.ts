@@ -12,8 +12,21 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/user': 'http://localhost:3001/',
-      '/exam': 'http://localhost:3002/',
+      '/api/user': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/api/exam': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/api/answer': {
+        target: 'http://localhost:3003',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
   },
 })

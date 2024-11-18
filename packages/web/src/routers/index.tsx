@@ -6,6 +6,8 @@ import UpdatePassword from '@/pages/UpdatePassword'
 import Edit from '@/pages/Edit'
 import NotFound from '@/pages/NotFound'
 import { QuestionProvider } from '@/pages/Edit/QuestionContext'
+import Exam from '@/pages/Exam'
+import Result from '@/pages/Result'
 
 declare module 'react-router-dom' {
   interface IndexRouteObject {
@@ -53,6 +55,14 @@ export const routes: RouteObject[] = [
         <Edit />
       </QuestionProvider>
     ),
+  },
+  {
+    path: 'exam/:id',
+    element: <Exam />,
+  },
+  {
+    path: 'res/:id',
+    element: <Result />,
   },
   {
     path: '*',

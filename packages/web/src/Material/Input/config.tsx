@@ -5,9 +5,6 @@ const config = {
   type: 'input',
   sort: 2,
   component: Input,
-  props: {
-    onChange: () => {},
-  },
 }
 
 export default config

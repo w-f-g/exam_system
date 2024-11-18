@@ -14,7 +14,7 @@ class HttpClient {
 
   constructor() {
     const req = axios.create({
-      baseURL: '/',
+      baseURL: '/api',
     })
     this.request = req
 
