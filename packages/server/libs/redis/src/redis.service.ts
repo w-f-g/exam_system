@@ -19,6 +19,20 @@ export class RedisService {
       EX: ttl,
     })
   }
+
+  zRankingList(key: string, start: number = 0, end: number = -1) {
+    return this.redisClient.zRange(key, start, end, { REV: true })
+  }
+
+  zAdd(key: string, members: Record<string, number>) {
+    const mems = Object.entries(members).map(([k, v]) => {
+      return {
+        value: k,
+        score: v,
+      }
+    })
+    return this.redisClient.zAdd(key, mems)
+  }
 }
 
 export const InjectRedisService = Inject(RedisService)
