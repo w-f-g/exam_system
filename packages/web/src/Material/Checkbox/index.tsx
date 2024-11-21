@@ -1,5 +1,4 @@
 import { Checkbox as AntdCheckbox } from 'antd'
-import { useEffect, useState } from 'react'
 
 type Props = {
   options: string

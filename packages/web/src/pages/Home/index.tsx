@@ -1,17 +1,26 @@
-import { deleteExam, getExamList, recoverExam } from '@/apis'
+import {
+  deleteExam,
+  exportExam as exportAnswer,
+  getExamList,
+  recoverExam,
+} from '@/apis'
 import { IExamListVo } from '@exam_system/types'
 import { Button, message, Popconfirm, Popover } from 'antd'
 import { useEffect, useState } from 'react'
 import ExamAddModal from './ExamAddModal'
 import { CopyOutlined, PoweroffOutlined } from '@ant-design/icons'
 import { logout } from '@/stores/user'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import copy from 'copy-to-clipboard'
+import RankingModal from './RankingModal'
 
 export default function Home() {
+  const [bin, setBin] = useState(false)
   const [examList, setExamList] = useState<IExamListVo[]>([])
   const [isAddExamModalOpen, setIsAddExamModalOpen] = useState(false)
-  const [bin, setBin] = useState(false)
+
+  const [curExamId, setCurExamId] = useState<number | null>(null)
+  const [isRankingModalOpen, setIsRankingModalOpen] = useState(false)
 
   const navigate = useNavigate()
 
@@ -81,12 +90,8 @@ export default function Home() {
                       <Button className="m-[10px] bg-[darkblue]" type="primary">
                         {x.isPublish ? '停止' : '发布'}
                       </Button>
-                      <Button
-                        className="m-[10px] bg-[green]"
-                        type="primary"
-                        onClick={() => navigate(`/edit/${x.id}`)}
-                      >
-                        编辑
+                      <Button type="primary" className="m-[10px] bg-[green]">
+                        <Link to={`/edit/${x.id}`}>编辑</Link>
                       </Button>
                       <Popover
                         trigger="click"
@@ -103,6 +108,19 @@ export default function Home() {
                       >
                         <Button>考试链接</Button>
                       </Popover>
+                      <Button
+                        className="m-[10px] bg-[orange]"
+                        type="primary"
+                        onClick={() => {
+                          setIsRankingModalOpen(true)
+                          setCurExamId(x.id)
+                        }}
+                      >
+                        排行榜
+                      </Button>
+                      <Button onClick={() => exportAnswer(x.id)}>
+                        导出所有答卷
+                      </Button>
                       <Popconfirm
                         title="试卷删除"
                         description="确认放入回收站吗？"
@@ -139,6 +157,14 @@ export default function Home() {
         handleClose={() => {
           setIsAddExamModalOpen(false)
           load()
+        }}
+      />
+      <RankingModal
+        examId={curExamId}
+        isOpen={isRankingModalOpen}
+        handleClose={() => {
+          setIsRankingModalOpen(false)
+          setCurExamId(null)
         }}
       />
     </div>
