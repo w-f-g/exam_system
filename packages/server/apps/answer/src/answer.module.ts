@@ -3,16 +3,17 @@ import { AnswerController } from './answer.controller'
 import { AnswerService } from './answer.service'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { RedisModule } from '@app/redis'
-import { PrismaModule } from '@app/prisma'
+import { Answer, DBModule, Exam, User } from 'libs/db/src'
 import { APP_GUARD } from '@nestjs/core'
 import { AuthGuard, CommonModule } from '@app/common'
 import { ExcelModule } from '@app/excel'
+import { TypeOrmModule } from '@nestjs/typeorm'
 
 @Module({
   imports: [
-    RedisModule,
-    PrismaModule,
     CommonModule,
+    RedisModule,
+    DBModule,
     ExcelModule,
     ClientsModule.register([
       {
@@ -23,6 +24,7 @@ import { ExcelModule } from '@app/excel'
         },
       },
     ]),
+    TypeOrmModule.forFeature([Exam, Answer, User]),
   ],
   controllers: [AnswerController],
   providers: [

@@ -1,4 +1,3 @@
-import { InjectPrismaService, PrismaService } from '@app/prisma'
 import { InjectRedisService, RedisService } from '@app/redis'
 import { BadRequestException, Inject, Injectable, Logger } from '@nestjs/common'
 import { EmailService, InjectEmailService } from '@app/email'
@@ -8,14 +7,16 @@ import {
   UserUpdatePasswordDto,
 } from './dto/user.dto'
 import { JwtService } from '@nestjs/jwt'
+import { InjectUserRepository, User } from '@app/db'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class UserService {
   @InjectRedisService
   private redisService: RedisService
 
-  @InjectPrismaService
-  private prismaService: PrismaService
+  @InjectUserRepository
+  private userRepository: Repository<User>
 
   @InjectEmailService
   private emailService: EmailService
@@ -46,17 +47,30 @@ export class UserService {
       throw new BadRequestException('验证码不正确')
     }
 
-    const u = await this.prismaService.user.findUnique({
+    const u = await this.userRepository.findOneBy({
+      username: user.username,
+    })
+    /*     const u = await this.prismaService.user.findUnique({
       where: {
         username: user.username,
       },
-    })
+    }) */
     if (u) {
       throw new BadRequestException('用户已存在')
     }
 
     try {
-      const res = await this.prismaService.user.create({
+      const res = await this.userRepository
+        .createQueryBuilder()
+        .select(['id', 'username', 'email', 'createTime'])
+        .insert()
+        .values({
+          username: user.username,
+          password: user.password,
+          email: user.email,
+        })
+        .execute()
+      /*       const res = await this.prismaService.user.create({
         data: {
           username: user.username,
           password: user.password,
@@ -68,7 +82,7 @@ export class UserService {
           email: true,
           createTime: true,
         },
-      })
+      }) */
       return res
     } catch (e) {
       this.logger.error(e, UserService)
@@ -77,11 +91,14 @@ export class UserService {
   }
 
   async login(userLogin: UserLoginDto) {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.userRepository.findOneBy({
+      username: userLogin.username,
+    })
+    /*     const user = await this.prismaService.user.findUnique({
       where: {
         username: userLogin.username,
       },
-    })
+    }) */
     if (!user) {
       throw new BadRequestException('用户不存在')
     }
@@ -115,25 +132,31 @@ export class UserService {
     if (passwordDto.captcha !== captcha) {
       throw new BadRequestException('验证码不正确')
     }
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.userRepository.findOneBy({
+      username: passwordDto.username,
+    })
+    /*     const user = await this.prismaService.user.findUnique({
       where: {
         username: passwordDto.username,
       },
-    })
+    }) */
 
     try {
-      await this.prismaService.user.update({
+      await this.userRepository.update(user.id, {
+        password: passwordDto.password,
+      })
+      /*       await this.prismaService.user.update({
         where: {
           id: user.id,
         },
         data: {
           password: passwordDto.password,
         },
-      })
+      }) */
       return '密码修改成功'
     } catch (e) {
       this.logger.error(e, UserService)
-      return '密码修改失败'
+      throw new BadRequestException('密码修改失败,' + e)
     }
   }
 

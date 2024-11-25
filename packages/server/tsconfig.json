@@ -24,11 +24,11 @@
       "@app/redis/*": [
         "libs/redis/src/*"
       ],
-      "@app/prisma": [
-        "libs/prisma/src"
+      "@app/db": [
+        "libs/db/src"
       ],
-      "@app/prisma/*": [
-        "libs/prisma/src/*"
+      "@app/db/*": [
+        "libs/db/src/*"
       ],
       "@app/email": [
         "libs/email/src"

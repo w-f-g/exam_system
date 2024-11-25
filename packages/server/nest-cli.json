@@ -64,13 +64,13 @@
         "tsConfigPath": "libs/redis/tsconfig.lib.json"
       }
     },
-    "prisma": {
+    "db": {
       "type": "library",
-      "root": "libs/prisma",
+      "root": "libs/db",
       "entryFile": "index",
-      "sourceRoot": "libs/prisma/src",
+      "sourceRoot": "libs/db/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
+        "tsConfigPath": "libs/db/tsconfig.lib.json"
       }
     },
     "email": {

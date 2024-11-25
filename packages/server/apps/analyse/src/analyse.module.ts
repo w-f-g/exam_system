@@ -3,10 +3,16 @@ import { APP_GUARD } from '@nestjs/core'
 import { AnalyseController } from './analyse.controller'
 import { AnalyseService } from './analyse.service'
 import { RedisModule } from '@app/redis'
-import { PrismaModule } from '@app/prisma'
+import { Answer, DBModule } from 'libs/db/src'
 import { AuthGuard, CommonModule } from '@app/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 @Module({
-  imports: [RedisModule, PrismaModule, CommonModule],
+  imports: [
+    CommonModule,
+    RedisModule,
+    DBModule,
+    TypeOrmModule.forFeature([Answer]),
+  ],
   controllers: [AnalyseController],
   providers: [
     AnalyseService,

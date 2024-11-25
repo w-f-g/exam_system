@@ -58,7 +58,7 @@ export class ExamController {
     return res
   }
 
-  @Get('publish/:id')
+  @Put('publish/:id')
   @RequireLogin()
   async publish(
     @UserInfo('userId') userId: number,
@@ -68,7 +68,7 @@ export class ExamController {
     return res
   }
 
-  @Get('unpublish/:id')
+  @Put('unpublish/:id')
   @RequireLogin()
   async unpublish(
     @UserInfo('userId') userId: number,

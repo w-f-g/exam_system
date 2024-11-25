@@ -1,20 +1,38 @@
 import { Injectable } from '@nestjs/common'
 import { AnswerAddDto } from './dto/answer.dto'
-import { InjectPrismaService, PrismaService } from '@app/prisma'
+import {
+  Answer,
+  Exam,
+  InjectAnswerRepository,
+  InjectExamRepository,
+  InjectUserRepository,
+  User,
+} from '@app/db'
+import { Repository } from 'typeorm'
+import { IAnswer, IExam } from '@exam_system/types'
 
 @Injectable()
 export class AnswerService {
-  @InjectPrismaService
-  private prismaService: PrismaService
+  @InjectAnswerRepository
+  private answerRepository: Repository<Answer>
+
+  @InjectExamRepository
+  private examRepository: Repository<Exam>
+
+  @InjectUserRepository
+  private userRepository: Repository<User>
 
   getHello(): string {
     return 'Hello World!'
   }
 
   async add(data: AnswerAddDto, userId: number) {
-    const exam = await this.prismaService.exam.findUnique({
-      where: { id: data.examId },
+    const exam = await this.examRepository.findOneBy({
+      id: data.examId,
     })
+    // const exam = await this.prismaService.exam.findUnique({
+    //   where: { id: data.examId },
+    // })
     // 试卷题目
     let questions = []
     try {
@@ -39,26 +57,49 @@ export class AnswerService {
       }
       return prev
     }, 0)
-    return this.prismaService.answer.create({
-      data: {
-        content: data.content,
-        score,
-        answerer: {
-          connect: {
-            id: userId,
-          },
-        },
-        exam: {
-          connect: {
-            id: data.examId,
-          },
-        },
-      },
+    const res = await this.answerRepository.insert({
+      content: data.content,
+      score,
+      answererId: userId,
+      examId: data.examId,
     })
+    return res.identifiers[0]
+    // return this.prismaService.answer.create({
+    //   data: {
+    //     content: data.content,
+    //     score,
+    //     answerer: {
+    //       connect: {
+    //         id: userId,
+    //       },
+    //     },
+    //     exam: {
+    //       connect: {
+    //         id: data.examId,
+    //       },
+    //     },
+    //   },
+    // })
   }
 
   async list(examId: number) {
-    return this.prismaService.answer.findMany({
+    const res = await this.answerRepository.findBy({
+      examId,
+    })
+    const data: IAnswer[] = []
+    for (const answer of res) {
+      const [answerer, exam] = await Promise.all([
+        this.userRepository.findOneBy({ id: answer.answererId }),
+        this.examRepository.findOneBy({ id: answer.examId }),
+      ])
+      data.push({
+        ...answer,
+        exam: exam as unknown as IExam,
+        answerer,
+      })
+    }
+    return data
+    /*     return this.prismaService.answer.findMany({
       where: {
         examId,
       },
@@ -66,16 +107,17 @@ export class AnswerService {
         exam: true,
         answerer: true,
       },
-    })
+    }) */
   }
 
   async find(id: number) {
-    return this.prismaService.answer.findUnique({
+    return this.answerRepository.findOneBy({ id })
+    /*     return this.prismaService.answer.findUnique({
       where: { id },
       include: {
         exam: true,
         answerer: true,
       },
-    })
+    }) */
   }
 }
