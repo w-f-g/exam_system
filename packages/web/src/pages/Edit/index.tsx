@@ -2,13 +2,13 @@ import { Link, useParams } from 'react-router-dom'
 import { Button, message } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { findExam, saveExam } from '@/apis'
-import { QuestionContext, TQuestion } from './QuestionContext'
+import { QuestionContext, QuestionProvider, TQuestion } from './QuestionContext'
 import EditArea from './views/EditArea'
 import Material from './views/Material'
 import Settings from './views/Settings'
 import PreviewModal from './views/PreviewModal'
 
-export default function Edit() {
+function Edit() {
   const { id } = useParams()
   const { state, load } = useContext(QuestionContext)
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
@@ -68,5 +68,13 @@ export default function Edit() {
         handleClose={() => setPreviewModalOpen(false)}
       />
     </div>
+  )
+}
+
+export default function EditPage() {
+  return (
+    <QuestionProvider>
+      <Edit />
+    </QuestionProvider>
   )
 }

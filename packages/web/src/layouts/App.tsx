@@ -1,6 +1,7 @@
 import { routes } from '@/routers'
-import { useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { useRoutes, RouteObject } from 'react-router-dom'
+import Loading from '@/components/Loading'
 
 export default function App() {
   const element = useRoutes(routes)
@@ -14,5 +15,5 @@ export default function App() {
     document.title = `考试系统${title ? '-' + title : ''}`
   }, [route])
 
-  return element
+  return <Suspense fallback={<Loading />}>{element}</Suspense>
 }

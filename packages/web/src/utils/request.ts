@@ -4,13 +4,14 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
+  InternalAxiosRequestConfig,
 } from 'axios'
 
 type TaskFun = (res: AxiosResponse) => void
 
 class HttpClient {
   request: AxiosInstance
-  private listeners: Map<number, TaskFun[]> = new Map()
+  private listeners: Map<number | string | RegExp, TaskFun[]> = new Map()
 
   constructor() {
     const req = axios.create({
@@ -19,38 +20,47 @@ class HttpClient {
     this.request = req
 
     req.interceptors.request.use(
-      (config) => {
-        const { token } = getUserState()
-        if (token) {
-          config.headers['Authorization'] = token
-        }
-        return config
-      },
-      (err) => err,
+      (config) => this.onRequestFulfilled(config),
+      (err) => this.onRequestRejected(err),
     )
 
-    const emit = (response: AxiosResponse) => {
-      const { status } = response
-      const tasks = this.listeners.get(status)
-      tasks?.forEach((task) => task(response))
-    }
-
     req.interceptors.response.use(
-      (response) => {
-        emit(response)
-
-        return response
-      },
-      (err: AxiosError) => {
-        console.log(err)
-        emit(err.response!)
-
-        return err
-      },
+      (response) => this.onResponseFulfilled(response),
+      (err: AxiosError) => this.onResponseRejected(err),
     )
   }
 
-  on(status: number, cb: TaskFun) {
+  private onRequestFulfilled(
+    config: InternalAxiosRequestConfig<any>,
+  ): InternalAxiosRequestConfig<any> {
+    const { token } = getUserState()
+    if (token) {
+      config.headers['Authorization'] = token
+    }
+    return config
+  }
+
+  private onRequestRejected(err: any) {
+    console.log(err)
+    return err
+  }
+
+  private onResponseFulfilled(
+    response: AxiosResponse<any, any>,
+  ): AxiosResponse<any, any> {
+    this.emit(response)
+
+    return response
+  }
+
+  private onResponseRejected(err: AxiosError) {
+    console.log(err)
+    this.emit(err.response!)
+
+    return err
+  }
+
+  on(status: number | string | RegExp, cb: TaskFun) {
     let index = 0
     if (this.listeners.has(status)) {
       const tasks = this.listeners.get(status)!
@@ -63,6 +73,21 @@ class HttpClient {
       const tasks = this.listeners.get(status)!
       tasks.splice(index, 1)
     }
+  }
+
+  private emit(response: AxiosResponse) {
+    const { status } = response
+    Array.from(this.listeners).map(([k, tasks]) => {
+      let flag = false
+      if (k instanceof RegExp) {
+        flag = k.test(status.toString())
+      } else {
+        flag = k.toString() === status.toString()
+      }
+      if (flag) {
+        tasks?.forEach((task) => task(response))
+      }
+    })
   }
 }
 

@@ -15,9 +15,14 @@ function HttpWrapper({ children }: PropsWithChildren) {
       navigate('/login', { replace: true })
     })
 
+    const unsubscribe_500 = httpClient.on(/^5\d+$/, () => {
+      message.error('服务器异常')
+    })
+
     return () => {
       unsubscribe_400()
       unsubscribe_401()
+      unsubscribe_500()
     }
   }, [])
 

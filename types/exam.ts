@@ -9,7 +9,7 @@ export interface IExam {
   createTime: string | Date
   updateTime: string | Date
   createUserId: number
-  createUser: IUser
+  createUser?: IUser
 }
 
 export interface IExamListVo extends Omit<IExam, 'createUser'> {}

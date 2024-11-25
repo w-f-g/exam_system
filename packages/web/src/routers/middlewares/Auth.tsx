@@ -7,7 +7,6 @@ const WHITE_LIST = ['/login', '/register', '/update_password']
 export default function Auth({ children }: PropsWithChildren) {
   const user = useUserStore((s) => s.user)
   const location = useLocation()
-  console.log(location)
 
   const isGreenLight = WHITE_LIST.includes(location.pathname)
 

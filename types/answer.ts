@@ -8,9 +8,9 @@ export interface IAnswer {
   createTime: string | Date
   updateTime: string | Date
   answererId: number
-  answerer: IUser
+  answerer?: IUser
   examId: number
-  exam: IExam
+  exam?: IExam
 }
 
 export interface IAnswerAddDto extends Pick<IAnswer, 'content' | 'examId'> {}

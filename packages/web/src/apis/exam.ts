@@ -35,6 +35,22 @@ export const recoverExam = async (id: number) => {
   return res
 }
 
+export const publishExam = async (id: number) => {
+  const res = await request({
+    url: '/exam/publish/' + id,
+    method: 'put',
+  })
+  return res
+}
+
+export const unpublishExam = async (id: number) => {
+  const res = await request({
+    url: '/exam/unpublish/' + id,
+    method: 'put',
+  })
+  return res
+}
+
 export const findExam = async (id: number) => {
   const res = await request<IExamListVo>({
     url: '/exam/find/' + id,

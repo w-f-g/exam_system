@@ -2,7 +2,9 @@ import {
   deleteExam,
   exportExam as exportAnswer,
   getExamList,
+  publishExam,
   recoverExam,
+  unpublishExam,
 } from '@/apis'
 import { IExamListVo } from '@exam_system/types'
 import { Button, message, Popconfirm, Popover } from 'antd'
@@ -13,9 +15,11 @@ import { logout } from '@/stores/user'
 import { Link, useNavigate } from 'react-router-dom'
 import copy from 'copy-to-clipboard'
 import RankingModal from './RankingModal'
+import Loading from '@/components/Loading'
 
 export default function Home() {
   const [bin, setBin] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [examList, setExamList] = useState<IExamListVo[]>([])
   const [isAddExamModalOpen, setIsAddExamModalOpen] = useState(false)
 
@@ -29,8 +33,12 @@ export default function Home() {
   }, [])
 
   const load = async () => {
+    setLoading(true)
     const res = await getExamList()
-    setExamList(res)
+    if (res) {
+      setExamList(res)
+    }
+    setLoading(false)
   }
 
   const handleDeleteExam = async (id: number) => {
@@ -54,7 +62,7 @@ export default function Home() {
     navigate('/login')
   }
 
-  return (
+  return !loading ? (
     <div>
       <div className="h-20 px-5 flex justify-between items-center border-b border-b-[#aaa]">
         <h1>考试系统</h1>
@@ -87,7 +95,18 @@ export default function Home() {
                   <p>{x.name}</p>
                   {!bin ? (
                     <div>
-                      <Button className="m-[10px] bg-[darkblue]" type="primary">
+                      <Button
+                        onClick={async () => {
+                          if (x.isPublish) {
+                            await unpublishExam(x.id)
+                          } else {
+                            await publishExam(x.id)
+                          }
+                          load()
+                        }}
+                        className="m-[10px] bg-[darkblue]"
+                        type="primary"
+                      >
                         {x.isPublish ? '停止' : '发布'}
                       </Button>
                       <Button type="primary" className="m-[10px] bg-[green]">
@@ -168,5 +187,7 @@ export default function Home() {
         }}
       />
     </div>
+  ) : (
+    <Loading />
   )
 }
