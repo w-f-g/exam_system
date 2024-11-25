@@ -14,7 +14,7 @@ const columns: TableColumnsType<IAnswer> = [
     title: '名字',
     key: 'name',
     render: (_, record) => {
-      return <div>{record.answerer.username}</div>
+      return <div>{record.answerer?.username}</div>
     },
   },
   {

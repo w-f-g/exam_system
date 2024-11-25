@@ -90,7 +90,7 @@ export default function Login() {
                 if (value !== pwd) {
                   return Promise.reject('两次输入密码不一致')
                 }
-                Promise.resolve()
+                return Promise.resolve()
               },
             },
           ]}
