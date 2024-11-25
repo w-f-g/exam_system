@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev:web": "pnpm -C packages/web dev",
-    "dev:server": "pnpm -C packages/server start:dev"
+    "dev:server": "pnpm -C packages/server start:dev",
+    "build:web": "pnpm -C packages/web build",
+    "build:server": "docker build . --target server -t exam_system_server",
+    "build": "docker-compose up -d"
   },
   "devDependencies": {
     "eslint": "^9.13.0",

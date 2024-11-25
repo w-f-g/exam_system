@@ -1,0 +1,15 @@
+*.md
+.git
+.gitignore
+dist/
+node_modules
+packages/**/*.md
+packages/**/*.gz
+packages/**/*.tar
+packages/**/*.sql
+packages/**/.vscode/
+packages/**/.eslintrc
+packages/**/.eslintrc.js
+packages/**/.eslintignore
+packages/**/.dockerignore
+!types/dist/
