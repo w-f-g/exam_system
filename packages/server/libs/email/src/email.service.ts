@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Transporter, createTransport } from 'nodemailer'
 
-const email = '3581541620@qq.com'
+const email = ''
 
 @Injectable()
 export class EmailService {
@@ -14,7 +14,7 @@ export class EmailService {
       secure: false,
       auth: {
         user: email,
-        pass: 'sydvvzmcysnpcjfe',
+        pass: '',
       },
     })
   }

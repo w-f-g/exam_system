@@ -7,7 +7,13 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 
-type TaskFun = (res: AxiosResponse) => void
+type TResponse = {
+  data: any
+  status: number | string
+  [k: string]: any
+}
+
+type TaskFun = (res: TResponse) => void
 
 class HttpClient {
   request: AxiosInstance
@@ -75,7 +81,7 @@ class HttpClient {
     }
   }
 
-  private emit(response: AxiosResponse) {
+  private emit(response: TResponse) {
     const { status } = response
     Array.from(this.listeners).map(([k, tasks]) => {
       let flag = false
